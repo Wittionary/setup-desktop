@@ -6,30 +6,13 @@ Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRes
 
 # Install Chocolatey
 Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+RefreshEnv.cmd
 
 # Use Chocolatey to install apps
-& choco install 7zip
-& choco install autohotkey
-& choco install docker-desktop
-& choco install evernote
-& choco install f.lux
-& choco install git
-& choco install Github-desktop
-& choco install GoogleChrome
-& choco install Greenshot
-& choco install Hyper
-& choco install VScode
-& choco install Firefox
-& choco install ProtonVPN
-& choco install Python
-& choco install Simplenote
-& choco install Todoist
-& choco install todoist-outlook
-& choco install vmwarevsphereclient
-& choco install winpcap
-& choco install Wireshark
-& choco install zoom
+& choco install 7zip autohotkey docker-desktop evernote f.lux git Github-desktop GoogleChrome Greenshot VScode Firefox ProtonVPN Python Simplenote Todoist todoist-outlook vmwarevsphereclient winpcap Wireshark zoom 1password -y
 
-& choco install 1password # requires reboot?
+#Windows Terminal
+$windowsTerminalPackage = "Microsoft.WindowsTerminal_0.3.2171.0_x64__8wekyb3d8bbwe"
+Add-AppxPackage -Register “C:\Program Files\WindowsApps\$windowsTerminalPackage” –DisableDevelopmentMode
 
 Restart-Computer -Confirm
