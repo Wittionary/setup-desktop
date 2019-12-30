@@ -13,17 +13,19 @@ RefreshEnv.cmd
 
 # List of apps to install
 # add new versions of powershell (6, 7, core)?
-$apps = @("7zip", "autohotkey", "docker-desktop", "evernote", 
+$apps = @("autohotkey", "docker-desktop", "evernote", 
         "f.lux", "git", "Github-desktop", "GoogleChrome", "Greenshot",
-        "VScode", "Firefox", "ProtonVPN", "Python", "Simplenote", "Spotify", "Todoist",
-        "todoist-outlook", "vmwarevsphereclient", "winpcap", "Wireshark",
-        "zoom","1password")
+        "Firefox", "powershell-core", "ProtonVPN", "Python", "Simplenote", "Spotify",
+        "Todoist","todoist-outlook", "VScode", "winpcap", "Wireshark",
+        "wsl", "wsl-ubuntu-1804",
+        "zoom","1password","7zip")
         
 # Use Chocolatey to install apps
 ForEach ($app in $apps) {
     & choco install $app --confirm
 }
 
+<# Blocking this out until I test the choco packages for WSL and WSL-UBUNTU-1804
 # Windows Subsystem for Linux (WSL 1) -- REQUIRES REBOOT
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -All -NoRestart
 Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -All -NoRestart
@@ -33,6 +35,7 @@ Invoke-WebRequest -Uri https://aka.ms/wsl-ubuntu-1804 -OutFile Ubuntu.appx -UseB
 Add-AppxPackage .\app_name.appx
 # Initialize distro ( https://docs.microsoft.com/en-us/windows/wsl/initialize-distro )
 # create sched task to run distro.exe upon next boot
+#>
 
 #Windows Terminal
 $windowsTerminalPackage = "Microsoft.WindowsTerminal_0.3.2171.0_x64__8wekyb3d8bbwe"
