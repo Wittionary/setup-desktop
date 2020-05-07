@@ -13,6 +13,8 @@ RefreshEnv.cmd
 
 # List of apps to install
 # add new versions of powershell (6, 7, core)?
+# TODO: Specify which user to install apps for if running script from a priveleged account
+# or the priv. account will get the app instead of desired user
 $apps = @("autohotkey", "docker-desktop", "evernote", 
         "f.lux", "git", "Github-desktop", "GoogleChrome", "Greenshot",
         "Firefox", "powershell-core", "ProtonVPN", "Python", "Simplenote", "Spotify",
@@ -40,5 +42,7 @@ Add-AppxPackage .\app_name.appx
 #Windows Terminal
 $windowsTerminalPackage = "Microsoft.WindowsTerminal_0.3.2171.0_x64__8wekyb3d8bbwe"
 Add-AppxPackage -Register “C:\Program Files\WindowsApps\$windowsTerminalPackage” –DisableDevelopmentMode
+
+# TODO: Setup powershell profile
 
 Restart-Computer -Confirm
