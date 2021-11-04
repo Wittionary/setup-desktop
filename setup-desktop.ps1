@@ -1,8 +1,6 @@
 # Goal: Setup your brand new desktop with most used apps
 # Requirements: Run this script as administrator
-
-# TODO:
-# add logging for troubleshooting and ensuring everything got installed if unattended
+$VerbosePreference = "Continue"
 
 # Hyper-V
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRestart
@@ -12,19 +10,22 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object
 RefreshEnv.cmd
 
 # List of apps to install
-# add new versions of powershell (6, 7, core)?
-# TODO: Specify which user to install apps for if running script from a priveleged account
-# or the priv. account will get the app instead of desired user
 $apps = @("autohotkey", "docker-desktop", "evernote", 
         "f.lux", "git", "Github-desktop", "GoogleChrome", "Greenshot",
-        "Firefox", "powershell-core", "ProtonVPN", "Python", "Simplenote", "Spotify",
+        "Firefox", "obsidian", "powershell-core", "ProtonVPN", "Python", "Simplenote", "Spotify",
         "Todoist","todoist-outlook", "VScode", "winpcap", "Wireshark",
         "wsl", "wsl-ubuntu-1804",
         "zoom","1password","7zip")
         
 # Use Chocolatey to install apps
+# TODO: 
+# - Add progress bar
+# - Add logging for troubleshooting and ensuring everything got installed if unattended
+# https://docs.chocolatey.org/en-us/choco/commands/install#exit-codes
+# - Specify which user to install apps for if running script from a priveleged account
+# or the priv. account will get the app instead of desired user
 ForEach ($app in $apps) {
-    & choco install $app --confirm
+    & choco install $app --confirm --limit-output
 }
 
 <# Blocking this out until I test the choco packages for WSL and WSL-UBUNTU-1804
@@ -39,7 +40,7 @@ Add-AppxPackage .\app_name.appx
 # create sched task to run distro.exe upon next boot
 #>
 
-#Windows Terminal
+# Windows Terminal
 $windowsTerminalPackage = "Microsoft.WindowsTerminal_0.3.2171.0_x64__8wekyb3d8bbwe"
 Add-AppxPackage -Register “C:\Program Files\WindowsApps\$windowsTerminalPackage” –DisableDevelopmentMode
 
