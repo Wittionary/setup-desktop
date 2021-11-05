@@ -14,7 +14,7 @@ $apps = @("autohotkey", "docker-desktop", "evernote",
         "f.lux", "git", "Github-desktop", "GoogleChrome", "Greenshot",
         "Firefox", "obsidian", "powershell-core", "ProtonVPN", "Python", "Simplenote", "Spotify",
         "Todoist","todoist-outlook", "VScode", "winpcap", "Wireshark",
-        "wsl", "wsl-ubuntu-1804",
+        "wsl", "wsl-ubuntu-2004",
         "zoom","1password","7zip")
         
 # Use Chocolatey to install apps
@@ -22,8 +22,6 @@ $apps = @("autohotkey", "docker-desktop", "evernote",
 # - Add progress bar
 # - Add logging for troubleshooting and ensuring everything got installed if unattended
 # https://docs.chocolatey.org/en-us/choco/commands/install#exit-codes
-# - Specify which user to install apps for if running script from a priveleged account
-# or the priv. account will get the app instead of desired user
 ForEach ($app in $apps) {
     & choco install $app --confirm --limit-output
 }
