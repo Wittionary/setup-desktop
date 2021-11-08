@@ -6,27 +6,35 @@ $VerbosePreference = "Continue"
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRestart
 
 # Install Chocolatey
-Set-ExecutionPolicy Bypass -Scope Process -Force; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+Set-ExecutionPolicy Bypass -Scope Process -Force
+Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 RefreshEnv.cmd
 
 # List of apps to install
-$apps = @("autohotkey", "docker-desktop", "evernote", 
+$Apps = @("covenanteyes", "docker-desktop", "dropbox", 
         "f.lux", "git", "Github-desktop", "GoogleChrome", "Greenshot",
-        "Firefox", "obsidian", "powershell-core", "ProtonVPN", "Python", "Simplenote", "Spotify",
+        "Firefox", "microsoft-windows-terminal", "mRemoteNG", "obsidian", "powershell-core", "ProtonVPN",
+        "Python", "Simplenote", "Spotify",
         "Todoist","todoist-outlook", "VScode", "winpcap", "Wireshark",
-        "wsl", "wsl-ubuntu-2004",
+        "wsl", "wsl-kalilinux", "wsl-ubuntu-2004",
         "zoom","1password","7zip")
+# Not listed in choco package management:
+# - espanso
+# - Raindrop.io
         
 # Use Chocolatey to install apps
 # TODO: 
 # - Add progress bar
 # - Add logging for troubleshooting and ensuring everything got installed if unattended
 # https://docs.chocolatey.org/en-us/choco/commands/install#exit-codes
-ForEach ($app in $apps) {
+$i = 0
+ForEach ($App in $Apps) {
+    $i++
+    Write-Progress -Activity 'Bringing Windows servers to desired state' -CurrentOperation $App -PercentComplete (($i / $Apps.Count) * 100)
     & choco install $app --confirm --limit-output
 }
 
-<# Blocking this out until I test the choco packages for WSL and WSL-UBUNTU-1804
+<# Blocking this out until I test the choco packages for WSL and WSL-UBUNTU-2004
 # Windows Subsystem for Linux (WSL 1) -- REQUIRES REBOOT
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -All -NoRestart
 Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -All -NoRestart
@@ -38,10 +46,16 @@ Add-AppxPackage .\app_name.appx
 # create sched task to run distro.exe upon next boot
 #>
 
-# Windows Terminal
-$windowsTerminalPackage = "Microsoft.WindowsTerminal_0.3.2171.0_x64__8wekyb3d8bbwe"
-Add-AppxPackage -Register “C:\Program Files\WindowsApps\$windowsTerminalPackage” –DisableDevelopmentMode
+# Configure taskbar
+# Hide search window
+# Show task view button
+# Pin favorite applications to taskbar
+# https://docs.microsoft.com/en-us/windows/configuration/configure-windows-10-taskbar
+# Left to right:
+# - Firefox, Windows Terminal, VScode, Obsidian, Todoist, Spotify, Chrome, anything else, Raindrop.io
 
-# TODO: Setup powershell profile
-
+# Reboot for changes
+$PatienceInterval = 10
+Write-Host "Restarting PC in $PatienceInterval seconds"
+Start-Sleep -Seconds $PatienceInterval
 Restart-Computer -Confirm
