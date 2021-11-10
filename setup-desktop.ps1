@@ -14,7 +14,7 @@ RefreshEnv.cmd
 $Apps = @("covenanteyes", "docker-desktop", "dropbox", 
         "f.lux", "git", "Github-desktop", "GoogleChrome", "Greenshot",
         "Firefox", "microsoft-windows-terminal", "mRemoteNG", "obsidian", "powershell-core", "ProtonVPN",
-        "Python", "Simplenote", "Spotify",
+        "Python", "RescueTime", "Simplenote", "Spotify",
         "Todoist","todoist-outlook", "VScode", "winpcap", "Wireshark",
         "wsl", "wsl-kalilinux", "wsl-ubuntu-2004",
         "zoom","1password","7zip")
