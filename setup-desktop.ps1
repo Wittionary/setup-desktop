@@ -15,12 +15,13 @@ $Apps = @("covenanteyes", "docker-desktop", "dropbox",
         "f.lux", "git", "Github-desktop", "GoogleChrome", "Greenshot",
         "Firefox", "microsoft-windows-terminal", "mRemoteNG", "obsidian", "powershell-core", "ProtonVPN",
         "Python", "RescueTime", "Simplenote", "Spotify",
-        "Todoist","todoist-outlook", "VScode", "winpcap", "Wireshark",
+        "todoist-outlook", "VScode", "winpcap", "Wireshark",
         "wsl", "wsl-kalilinux", "wsl-ubuntu-2004",
         "zoom","1password","7zip")
 # Not listed in choco package management:
-# - espanso
+# - espanso - https://espanso.org/docs/next/install/win/
 # - Raindrop.io
+# - Todoist (legacy package is hosted as of 11/23/21) - https://todoist.com/downloads
         
 # Use Chocolatey to install apps
 # TODO: 
