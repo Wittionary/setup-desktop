@@ -1,6 +1,6 @@
 # Goal: Setup your brand new desktop with most used apps
 # Requirements: Run this script as administrator
-$VerbosePreference = "Continue"
+#$VerbosePreference = "Continue"
 
 # Hyper-V
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRestart
@@ -11,7 +11,7 @@ Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://cho
 RefreshEnv.cmd
 
 # List of apps to install
-$Apps = @("covenanteyes", "docker-desktop", "dropbox", 
+$Apps = @("azure-cli", "covenanteyes", "docker-desktop", "dropbox", 
         "f.lux", "git", "Github-desktop", "GoogleChrome", "Greenshot",
         "Firefox", "microsoft-windows-terminal", "mRemoteNG", "obsidian", "powershell-core", "ProtonVPN",
         "Python", "RescueTime", "Simplenote", "Spotify",
