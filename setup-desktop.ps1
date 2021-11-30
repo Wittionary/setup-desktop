@@ -15,12 +15,12 @@ $Apps = @("azure-cli", "covenanteyes", "docker-desktop", "dropbox",
         "f.lux", "git", "Github-desktop", "GoogleChrome", "Greenshot",
         "Firefox", "microsoft-windows-terminal", "mRemoteNG", "obsidian", "powershell-core", "ProtonVPN",
         "Python", "RescueTime", "Simplenote", "Spotify",
-        "todoist-outlook", "VScode", "winpcap", "Wireshark",
+        "terraform", "terragrunt", "todoist-outlook", "VScode", "winpcap", "Wireshark",
         "wsl", "wsl-kalilinux", "wsl-ubuntu-2004",
         "zoom","1password","7zip")
 # Not listed in choco package management:
 # - espanso - https://espanso.org/docs/next/install/win/
-# - Raindrop.io
+# - Raindrop.io -> maybe just use the Firefox extension and not native app
 # - Todoist (legacy package is hosted as of 11/23/21) - https://todoist.com/downloads
         
 # Use Chocolatey to install apps
@@ -35,17 +35,6 @@ ForEach ($App in $Apps) {
     & choco install $app --confirm --limit-output
 }
 
-<# Blocking this out until I test the choco packages for WSL and WSL-UBUNTU-2004
-# Windows Subsystem for Linux (WSL 1) -- REQUIRES REBOOT
-Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -All -NoRestart
-Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -All -NoRestart
-
-# Download distro ( https://docs.microsoft.com/en-us/windows/wsl/install-manual )
-Invoke-WebRequest -Uri https://aka.ms/wsl-ubuntu-1804 -OutFile Ubuntu.appx -UseBasicParsing
-Add-AppxPackage .\app_name.appx
-# Initialize distro ( https://docs.microsoft.com/en-us/windows/wsl/initialize-distro )
-# create sched task to run distro.exe upon next boot
-#>
 
 # Configure taskbar
 # Hide search window
