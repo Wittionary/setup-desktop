@@ -31,7 +31,7 @@ $Apps = @("azure-cli", "covenanteyes", "docker-desktop", "dropbox",
 $i = 0
 ForEach ($App in $Apps) {
     $i++
-    Write-Progress -Activity 'Bringing Windows servers to desired state' -CurrentOperation $App -PercentComplete (($i / $Apps.Count) * 100)
+    Write-Progress -Activity 'Installing applications' -CurrentOperation $App -PercentComplete (($i / $Apps.Count) * 100)
     & choco install $app --confirm --limit-output
 }
 
@@ -43,6 +43,15 @@ ForEach ($App in $Apps) {
 # https://docs.microsoft.com/en-us/windows/configuration/configure-windows-10-taskbar
 # Left to right:
 # - Firefox, Windows Terminal, VScode, Obsidian, Todoist, Spotify, Chrome, anything else, Raindrop.io
+
+# Powershell Modules to install
+$PowershellModules = @("az")
+$i = 0
+foreach ($PowershellModule in $PowershellModules) {
+    $i++
+    Write-Progress -Activity 'Installing Powershell modules' -CurrentOperation $PowershellModule -PercentComplete (($i / $PowershellModules.Count) * 100)
+    Install-Module -Name $PowershellModule
+}
 
 # Reboot for changes
 $PatienceInterval = 10
