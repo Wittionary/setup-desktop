@@ -16,7 +16,7 @@ $Apps = @("azure-cli", "covenanteyes", "docker-desktop", "dropbox",
         "kubernetes-cli", "microsoft-windows-terminal", "mRemoteNG", "obsidian", "powershell-core", "ProtonVPN",
         "Python", "RescueTime", "Simplenote", "Spotify",
         "terraform", "terragrunt", "todoist-outlook", "VScode", "winpcap", "Wireshark",
-        "wsl", "wsl-kalilinux", "wsl-ubuntu-2004",
+        "wsl",
         "zoom","1password","7zip")
 # Not listed in choco package management:
 # - espanso - https://espanso.org/docs/next/install/win/
@@ -25,15 +25,20 @@ $Apps = @("azure-cli", "covenanteyes", "docker-desktop", "dropbox",
         
 # Use Chocolatey to install apps
 # TODO: 
-# - Add progress bar
 # - Add logging for troubleshooting and ensuring everything got installed if unattended
 # https://docs.chocolatey.org/en-us/choco/commands/install#exit-codes
 $i = 0
+$ErrorStack = @()
 ForEach ($App in $Apps) {
     $i++
     Write-Progress -Activity 'Installing applications' -CurrentOperation $App -PercentComplete (($i / $Apps.Count) * 100)
-    & choco install $app --confirm --limit-output
+    try {
+        & choco install $App --confirm --limit-output
+    } catch {
+        $ErrorStack += $Error
+    }
 }
+Write-Host "Installation errors:`n$ErrorStack"
 
 
 # Configure taskbar
@@ -52,6 +57,26 @@ foreach ($PowershellModule in $PowershellModules) {
     Write-Progress -Activity 'Installing Powershell modules' -CurrentOperation $PowershellModule -PercentComplete (($i / $PowershellModules.Count) * 100)
     Install-Module -Name $PowershellModule
 }
+
+# Setup WSL
+wsl --update
+$Distros = @("Ubuntu", "kali-linux")
+foreach ($Distro in $Distros) {
+    # Install and update each distro
+    wsl --install --distribution $Distro
+    wsl --set-default $Distro
+    wsl --user root -- sudo apt update
+    wsl --user root -- sudo apt upgrade -y
+}
+
+# Set Ubuntu as default
+wsl --set-default Ubuntu
+# Install software
+$LinuxSoftware = @("figlet", "git", "zsh")
+wsl -u root -- sudo apt install $LinuxSoftware -y
+# Setup oh-my-zsh
+#wsl -u root -- sudo sh -c `"`$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)`" `"`" --unattended
+#wsl -u root -- sudo chsh zsh
 
 # Reboot for changes
 $PatienceInterval = 10
