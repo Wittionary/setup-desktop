@@ -11,13 +11,15 @@ Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://cho
 RefreshEnv.cmd
 
 # List of apps to install
-$Apps = @("azure-cli", "covenanteyes", "docker-desktop", "dropbox", 
+$Apps = @(
+        "azure-cli", "covenanteyes", "docker-desktop", "dropbox", 
         "Firefox", "f.lux", "git", "Github-desktop", "GoogleChrome", "Greenshot",
         "kubernetes-cli", "microsoft-windows-terminal", "mRemoteNG", "obsidian", "powershell-core", "ProtonVPN",
         "Python", "RescueTime", "Simplenote", "Spotify",
         "terraform", "terragrunt", "todoist-outlook", "VScode", "winpcap", "Wireshark",
         "wsl",
-        "zoom","1password","7zip")
+        "zoom","1password","7zip"
+)
 # Not listed in choco package management:
 # - espanso - https://espanso.org/docs/next/install/win/
 # - Raindrop.io -> maybe just use the Firefox extension and not native app
@@ -62,9 +64,15 @@ foreach ($PowershellModule in $PowershellModules) {
 wsl --update
 $Distros = @("Ubuntu", "kali-linux")
 foreach ($Distro in $Distros) {
-    # Install and update each distro
+    # Install
+    Write-Host "Initializing $Distro..."
     wsl --install --distribution $Distro
     wsl --set-default $Distro
+    # Setup kubectl prereqs - https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+    wsl -u root -- sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    wsl -u root -- sudo echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    # Update each distro
+    Write-Host "Updating $Distro..."
     wsl --user root -- sudo apt update
     wsl --user root -- sudo apt upgrade -y
 }
@@ -72,11 +80,16 @@ foreach ($Distro in $Distros) {
 # Set Ubuntu as default
 wsl --set-default Ubuntu
 # Install software
-$LinuxSoftware = @("figlet", "git", "zsh")
+$LinuxSoftware = @(
+                "apt-transport-https", "ca-certificates", "curl", "figlet", "git", "kubectl",
+                "zsh"
+)
+Write-Host "Installing software..."
 wsl -u root -- sudo apt install $LinuxSoftware -y
 # Setup oh-my-zsh
 #wsl -u root -- sudo sh -c `"`$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)`" `"`" --unattended
 #wsl -u root -- sudo chsh zsh
+
 
 # Reboot for changes
 $PatienceInterval = 10
