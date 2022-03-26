@@ -13,7 +13,7 @@ RefreshEnv.cmd
 # List of apps to install
 $Apps = @(
         "azure-cli", "covenanteyes", "docker-desktop", "dropbox", 
-        "Firefox", "f.lux", "git", "Github-desktop", "GoogleChrome", "Greenshot",
+        "Firefox", "f.lux", "fzf", "git", "Github-desktop", "GoogleChrome", "Greenshot",
         "kubernetes-cli", "microsoft-windows-terminal", "mRemoteNG", "obsidian", "powershell-core", "ProtonVPN",
         "Python", "RescueTime", "Simplenote", "Spotify",
         "terraform", "terragrunt", "todoist-outlook", "VScode", "winpcap", "Wireshark",
