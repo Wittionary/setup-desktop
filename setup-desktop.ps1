@@ -62,11 +62,21 @@ foreach ($PowershellModule in $PowershellModules) {
 
 # Setup WSL
 wsl --update
-$Distros = @("Ubuntu", "kali-linux")
+$Distros = @("Ubuntu-20.04", "kali-linux")
 foreach ($Distro in $Distros) {
     # Install
     Write-Host "Initializing $Distro..."
     wsl --install --distribution $Distro
+}
+
+# Wait until the distros are setup manually w/ user and pass
+$UbuntuProcess = Get-Process -Name "ubuntu2004"
+$KaliProcess = Get-Process -Name "kali"
+Write-Host "Waiting for user to configure and close Ubuntu ($($UbuntuProcess.Id)) and Kali ($($UbuntuProcess.Id)) processes..."
+Wait-Process -Id $UbuntuProcess.Id
+Wait-Process -Id $KaliProcess.Id
+
+foreach ($Distro in $Distros) {
     wsl --set-default $Distro
     # Setup kubectl prereqs - https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
     wsl -u root -- sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
@@ -78,10 +88,10 @@ foreach ($Distro in $Distros) {
 }
 
 # Set Ubuntu as default
-wsl --set-default Ubuntu
+wsl --set-default "Ubuntu-20.04"
 # Install software
 $LinuxSoftware = @(
-                "apt-transport-https", "ca-certificates", "curl", "figlet", "git", "kubectl",
+                "apt-transport-https", "batcat", "ca-certificates", "curl", "figlet", "fzf", "git", "kubectl",
                 "zsh"
 )
 Write-Host "Installing software..."
