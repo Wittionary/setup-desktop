@@ -92,12 +92,11 @@ wsl --set-default "Ubuntu-20.04"
 # Install software
 $LinuxSoftware = @(
                 "apt-transport-https", "batcat", "ca-certificates", "curl", "figlet", "fzf", "git", "kubectl",
-                "zsh"
+                "zsh", "zsh-autosuggestions", "zsh-syntax-highlighting"
 )
 Write-Host "Installing software..."
 wsl -u root -- sudo apt install $LinuxSoftware -y
-# Setup oh-my-zsh
-#wsl -u root -- sudo sh -c `"`$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)`" `"`" --unattended
+# Setup zsh
 #wsl -u root -- sudo chsh zsh
 
 
