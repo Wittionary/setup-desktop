@@ -91,7 +91,8 @@ foreach ($Distro in $Distros) {
 wsl --set-default "Ubuntu-20.04"
 # Install software
 $LinuxSoftware = @(
-                "apt-transport-https", "batcat", "ca-certificates", "curl", "figlet", "fzf", "git", "kubectl",
+                "ansible", "apt-transport-https", "batcat", "ca-certificates", "curl", "figlet",
+                "fzf", "git", "kubectl",
                 "zsh", "zsh-autosuggestions", "zsh-syntax-highlighting"
 )
 Write-Host "Installing software..."
