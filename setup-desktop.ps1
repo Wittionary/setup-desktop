@@ -80,7 +80,8 @@ foreach ($Distro in $Distros) {
     wsl --set-default $Distro
     # Setup kubectl prereqs - https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
     wsl -u root -- sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-    wsl -u root -- sudo echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    wsl -u root -- sudo echo 'deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    
     # Update each distro
     Write-Host "Updating $Distro..."
     wsl --user root -- sudo apt update
@@ -91,14 +92,14 @@ foreach ($Distro in $Distros) {
 wsl --set-default "Ubuntu-20.04"
 # Install software
 $LinuxSoftware = @(
-                "ansible", "apt-transport-https", "batcat", "ca-certificates", "curl", "figlet",
+                "ansible", "apt-transport-https", "bat", "ca-certificates", "curl", "figlet",
                 "fzf", "git", "kubectl",
                 "zsh", "zsh-autosuggestions", "zsh-syntax-highlighting"
 )
 Write-Host "Installing software..."
 wsl -u root -- sudo apt install $LinuxSoftware -y
 # Setup zsh
-#wsl -u root -- sudo chsh zsh
+#wsl -u root -- sudo chsh -s $(which zsh)
 
 
 # Reboot for changes
