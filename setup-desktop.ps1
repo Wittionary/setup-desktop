@@ -96,8 +96,14 @@ $LinuxSoftware = @(
                 "fzf", "git", "kubectl",
                 "zsh", "zsh-autosuggestions", "zsh-syntax-highlighting"
 )
+Write-Host "Installing homebrew..."
+wsl -u root -- /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+wsl -u root -- echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/witt/.zprofile
+wsl -u root -- eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 Write-Host "Installing software..."
 wsl -u root -- sudo apt install $LinuxSoftware -y
+Write-Host "Installing terragrunt..."
+wsl -u root -- brew install terragrunt
 # Setup zsh
 #wsl -u root -- sudo chsh -s $(which zsh)
 
