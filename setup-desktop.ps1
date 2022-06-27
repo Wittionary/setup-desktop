@@ -11,15 +11,7 @@ Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://cho
 RefreshEnv.cmd
 
 # List of apps to install
-$Apps = @(
-        "azure-cli", "covenanteyes", "docker-desktop", "dropbox", 
-        "Firefox", "f.lux", "fzf", "git", "Github-desktop", "GoogleChrome", "Greenshot",
-        "kubernetes-cli", "microsoft-windows-terminal", "mRemoteNG", "obsidian", "powershell-core", "ProtonVPN",
-        "Python", "RescueTime", "Simplenote", "Spotify",
-        "terraform", "terragrunt", "todoist-outlook", "VScode", "winpcap", "Wireshark",
-        "wsl",
-        "zoom","1password","7zip"
-)
+$ChocoPackages = Get-Content .\packages-choco.conf
 # Not listed in choco package management:
 # - espanso - https://espanso.org/docs/next/install/win/
 # - Raindrop.io -> maybe just use the Firefox extension and not native app
@@ -31,11 +23,11 @@ $Apps = @(
 # https://docs.chocolatey.org/en-us/choco/commands/install#exit-codes
 $i = 0
 $ErrorStack = @()
-ForEach ($App in $Apps) {
+ForEach ($ChocoPackage in $ChocoPackages) {
     $i++
-    Write-Progress -Activity 'Installing applications' -CurrentOperation $App -PercentComplete (($i / $Apps.Count) * 100)
+    Write-Progress -Activity 'Installing applications' -CurrentOperation $ChocoPackage -PercentComplete (($i / $ChocoPackages.Count) * 100)
     try {
-        & choco install $App --confirm --limit-output
+        & choco install $ChocoPackage --confirm --limit-output
     } catch {
         $ErrorStack += $Error
     }
@@ -70,6 +62,7 @@ foreach ($Distro in $Distros) {
 }
 
 # Wait until the distros are setup manually w/ user and pass
+# TODO: feed the installs a config file that
 $UbuntuProcess = Get-Process -Name "ubuntu2004"
 $KaliProcess = Get-Process -Name "kali"
 Write-Host "Waiting for user to configure and close Ubuntu ($($UbuntuProcess.Id)) and Kali ($($UbuntuProcess.Id)) processes..."
@@ -91,19 +84,16 @@ foreach ($Distro in $Distros) {
 # Set Ubuntu as default
 wsl --set-default "Ubuntu-20.04"
 # Install software
-$LinuxSoftware = @(
-                "ansible", "apt-transport-https", "bat", "ca-certificates", "curl", "figlet",
-                "fzf", "git", "kubectl",
-                "zsh", "zsh-autosuggestions", "zsh-syntax-highlighting"
-)
+$AptPackages = Get-Content .\packages-apt.conf
+$HomebrewPackages = Get-Content .\packages-homebrew.conf
 Write-Host "Installing homebrew..."
 wsl -u root -- /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 wsl -u root -- echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/witt/.zprofile
 wsl -u root -- eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-Write-Host "Installing software..."
-wsl -u root -- sudo apt install $LinuxSoftware -y
-Write-Host "Installing terragrunt..."
-wsl -u root -- brew install terragrunt
+Write-Host "Installing apt packages..."
+wsl -u root -- sudo apt install $AptPackages -y
+Write-Host "Installing homebrew packages..."
+wsl -u root -- brew install $HomebrewPackages
 # Setup zsh
 #wsl -u root -- sudo chsh -s $(which zsh)
 
