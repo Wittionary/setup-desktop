@@ -1,6 +1,15 @@
 # Goal: Setup your brand new desktop with most used apps
 # Requirements: Run this script as administrator
 #$VerbosePreference = "Continue"
+$ConfFiles = @("packages-homebrew.conf",
+                "packages-apt.conf",
+                "packages-choco.conf")
+foreach ($ConfFile in $ConfFiles) {
+    if (! $(Test-Path -Path "./$ConfFile")) {
+        Write-Error "Configuration file `"$ConfFile`" not found."
+        exit 1
+    }
+}
 
 # Hyper-V
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRestart
