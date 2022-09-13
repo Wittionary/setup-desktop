@@ -9,7 +9,7 @@ foreach ($ConfFile in $ConfFiles) {
         Write-Error "Configuration file `"$ConfFile`" not found."
         Write-Host "Downloading `"$ConfFile`""
         $ConfFileUrl = "https://raw.githubusercontent.com/Wittionary/setup-desktop/master/$ConfFile"
-        ((New-Object System.Net.WebClient).DownloadString($ConfFileUrl))
+        ((New-Object System.Net.WebClient).DownloadString($ConfFileUrl)) | Out-File -FilePath $ConfFile
     } else {
         Write-Host "Configuration file `"$ConfFile`" found."
     }
