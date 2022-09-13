@@ -7,7 +7,11 @@ $ConfFiles = @("packages-homebrew.conf",
 foreach ($ConfFile in $ConfFiles) {
     if (! $(Test-Path -Path "./$ConfFile")) {
         Write-Error "Configuration file `"$ConfFile`" not found."
-        exit 1
+        Write-Host "Downloading `"$ConfFile`""
+        $ConfFileUrl = "https://raw.githubusercontent.com/Wittionary/setup-desktop/master/$ConfFile"
+        ((New-Object System.Net.WebClient).DownloadString($ConfFileUrl))
+    } else {
+        Write-Host "Configuration file `"$ConfFile`" found."
     }
 }
 
