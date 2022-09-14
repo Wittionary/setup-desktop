@@ -100,7 +100,7 @@ wsl --set-default "Ubuntu-20.04"
 $AptPackages = Get-Content .\packages-apt.conf
 $HomebrewPackages = Get-Content .\packages-homebrew.conf
 Write-Host "Installing homebrew..."
-wsl -u root -- /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+wsl -u root -- /bin/bash -c "$(curl https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 wsl -u root -- echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/witt/.zprofile
 wsl -u root -- eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 Write-Host "Installing apt packages..."
@@ -115,4 +115,4 @@ wsl -u root -- brew install $HomebrewPackages
 $PatienceInterval = 10
 Write-Host "Restarting PC in $PatienceInterval seconds"
 Start-Sleep -Seconds $PatienceInterval
-Restart-Computer -Confirm
+Restart-Computer -Confirm $true
