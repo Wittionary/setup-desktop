@@ -67,7 +67,7 @@ foreach ($PowershellModule in $PowershellModules) {
 
 # Setup WSL
 wsl --update
-$Distros = @("Ubuntu-20.04", "kali-linux")
+$Distros = @("Ubuntu-22.04", "kali-linux")
 foreach ($Distro in $Distros) {
     # Install
     Write-Host "Initializing $Distro..."
@@ -76,7 +76,7 @@ foreach ($Distro in $Distros) {
 
 # Wait until the distros are setup manually w/ user and pass
 # TODO: feed the installs a config file that
-$UbuntuProcess = Get-Process -Name "ubuntu2004"
+$UbuntuProcess = Get-Process -Name "ubuntu2204"
 $KaliProcess = Get-Process -Name "kali"
 Write-Host "Waiting for user to configure and close Ubuntu ($($UbuntuProcess.Id)) and Kali ($($UbuntuProcess.Id)) processes..."
 Wait-Process -Id $UbuntuProcess.Id
@@ -95,7 +95,7 @@ foreach ($Distro in $Distros) {
 }
 
 # Set Ubuntu as default
-wsl --set-default "Ubuntu-20.04"
+wsl --set-default "Ubuntu-22.04"
 # Install software
 $AptPackages = Get-Content .\packages-apt.conf
 $HomebrewPackages = Get-Content .\packages-homebrew.conf
