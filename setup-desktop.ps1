@@ -26,7 +26,6 @@ RefreshEnv.cmd
 # List of apps to install
 $ChocoPackages = Get-Content .\packages-choco.conf
 # Not listed in choco package management:
-# - espanso - https://espanso.org/docs/next/install/win/
 # - Raindrop.io -> maybe just use the Firefox extension and not native app
 # - Todoist (legacy package is hosted as of 11/23/21) - https://todoist.com/downloads
         
