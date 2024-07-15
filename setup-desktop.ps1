@@ -6,7 +6,7 @@ $ConfFiles = @("packages-homebrew.conf",
                 "packages-choco.conf")
 foreach ($ConfFile in $ConfFiles) {
     if (! $(Test-Path -Path "./$ConfFile")) {
-        Write-Error "Configuration file `"$ConfFile`" not found."
+        Write-Warning "Configuration file `"$ConfFile`" not found."
         Write-Host "Downloading `"$ConfFile`""
         $ConfFileUrl = "https://raw.githubusercontent.com/Wittionary/setup-desktop/master/$ConfFile"
         ((New-Object System.Net.WebClient).DownloadString($ConfFileUrl)) | Out-File -FilePath $ConfFile
@@ -26,7 +26,7 @@ RefreshEnv.cmd
 # List of apps to install
 $ChocoPackages = Get-Content .\packages-choco.conf
 # Not listed in choco package management:
-# - Raindrop.io -> maybe just use the Firefox extension and not native app
+# - Raindrop.io -> just use the browser extension and not native app
 # - Todoist (legacy package is hosted as of 11/23/21) - https://todoist.com/downloads
         
 # Use Chocolatey to install apps
@@ -66,7 +66,7 @@ foreach ($PowershellModule in $PowershellModules) {
 
 # Setup WSL
 wsl --update
-$Distros = @("Ubuntu-22.04", "kali-linux")
+$Distros = @("Ubuntu-24.04") # I've never used kali-linux to a meaningful degree
 foreach ($Distro in $Distros) {
     # Install
     Write-Host "Initializing $Distro..."
@@ -75,18 +75,21 @@ foreach ($Distro in $Distros) {
 
 # Wait until the distros are setup manually w/ user and pass
 # TODO: feed the installs a config file that
-$UbuntuProcess = Get-Process -Name "ubuntu2204"
-$KaliProcess = Get-Process -Name "kali"
+$UbuntuProcess = Get-Process -Name "ubuntu2404"
+$KaliProcess = Get-Process -Name "kali" -ErrorAction Continue
 Write-Host "Waiting for user to configure and close Ubuntu ($($UbuntuProcess.Id)) and Kali ($($UbuntuProcess.Id)) processes..."
 Wait-Process -Id $UbuntuProcess.Id
-Wait-Process -Id $KaliProcess.Id
+Wait-Process -Id $KaliProcess.Id -ErrorAction Continue
 
 foreach ($Distro in $Distros) {
     wsl --set-default $Distro
     # Setup kubectl prereqs - https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
-    wsl -u root -- sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-    wsl -u root -- sudo echo 'deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    wsl -u root -- sudo curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    wsl -u root -- sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg 
+    wsl -u root -- sudo echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    wsl -u root -- sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list
     
+
     # Update each distro
     Write-Host "Updating $Distro..."
     wsl --user root -- sudo apt update
@@ -94,7 +97,8 @@ foreach ($Distro in $Distros) {
 }
 
 # Set Ubuntu as default
-wsl --set-default "Ubuntu-22.04"
+wsl --set-default $Distros[0]
+
 # Install software
 $AptPackages = Get-Content .\packages-apt.conf
 $HomebrewPackages = Get-Content .\packages-homebrew.conf
