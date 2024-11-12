@@ -53,7 +53,7 @@ Write-Host "Installation errors:`n$ErrorStack"
 # Pin favorite applications to taskbar
 # https://docs.microsoft.com/en-us/windows/configuration/configure-windows-10-taskbar
 # Left to right:
-# - Firefox, Windows Terminal, VScode, Obsidian, Todoist, Spotify, Chrome, anything else, Raindrop.io
+# - Firefox/Vivaldi, Windows Terminal, VScode, Obsidian, Todoist, Spotify, Chrome, anything else, Raindrop.io
 
 # Powershell Modules to install
 $PowershellModules = @("az")
@@ -70,7 +70,7 @@ $Distros = @("Ubuntu-24.04") # I've never used kali-linux to a meaningful degree
 foreach ($Distro in $Distros) {
     # Install
     Write-Host "Initializing $Distro..."
-    wsl --install --distribution $Distro
+    wsl --install --web-download --distribution $Distro
 }
 
 # Wait until the distros are setup manually w/ user and pass
@@ -78,15 +78,15 @@ foreach ($Distro in $Distros) {
 $UbuntuProcess = Get-Process -Name "ubuntu2404"
 $KaliProcess = Get-Process -Name "kali" -ErrorAction Continue
 Write-Host "Waiting for user to configure and close Ubuntu ($($UbuntuProcess.Id)) and Kali ($($UbuntuProcess.Id)) processes..."
-Wait-Process -Id $UbuntuProcess.Id
-Wait-Process -Id $KaliProcess.Id -ErrorAction Continue
+if ($UbuntuProcess) { Wait-Process -Id $UbuntuProcess.Id }
+if ($KaliProcess) { Wait-Process -Id $KaliProcess.Id -ErrorAction Continue }
 
 foreach ($Distro in $Distros) {
     wsl --set-default $Distro
     # Setup kubectl prereqs - https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
-    wsl -u root -- sudo curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    wsl -u root -- curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
     wsl -u root -- sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg 
-    wsl -u root -- sudo echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    wsl -u root -- sudo echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
     wsl -u root -- sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list
     
 
