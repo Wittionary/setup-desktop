@@ -46,6 +46,21 @@ ForEach ($ChocoPackage in $ChocoPackages) {
 }
 Write-Host "Installation errors:`n$ErrorStack"
 
+# --------------- WINGET
+# TODO: consider maturing this implementation with a configuration file
+# source: https://learn.microsoft.com/en-us/windows/package-manager/configuration/
+$WingetPackages = Get-Content .\packages-winget.conf
+$i = 0
+$ErrorStack = @()
+ForEach ($WingetPackage in $WingetPackages) {
+    $i++
+    Write-Progress -Activity 'Installing applications' -CurrentOperation $WingetPackage -PercentComplete (($i / $WingetPackages.Count) * 100)
+    try {
+        & winget install --id $WingetPackage --accept-source-agreements
+    } catch {
+        $ErrorStack += $Error
+    }
+}
 
 # Configure taskbar
 # Hide search window
