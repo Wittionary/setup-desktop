@@ -3,7 +3,8 @@
 #$VerbosePreference = "Continue"
 $ConfFiles = @("packages-homebrew.conf",
                 "packages-apt.conf",
-                "packages-choco.conf")
+                "packages-choco.conf",
+                "packages-winget.conf")
 foreach ($ConfFile in $ConfFiles) {
     if (! $(Test-Path -Path "./$ConfFile")) {
         Write-Warning "Configuration file `"$ConfFile`" not found."
@@ -68,7 +69,7 @@ ForEach ($WingetPackage in $WingetPackages) {
 # Pin favorite applications to taskbar
 # https://docs.microsoft.com/en-us/windows/configuration/configure-windows-10-taskbar
 # Left to right:
-# - Firefox/Vivaldi, Windows Terminal, VScode, Obsidian, Todoist, Spotify, Chrome, anything else, Raindrop.io
+# - Firefox/Vivaldi, Windows Terminal, Obsidian, VScode, Todoist, Spotify, TickTick, Postman, <anything else>, Raindrop.io
 
 # Powershell Modules to install
 $PowershellModules = @("az")
